@@ -228,8 +228,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				if (GetKeyState(VK_LMENU) & 0x8000) return 0; // Left off
 			//	if (GetKeyState(VK_RMENU) & 0x8000) return 0; // Right off
 			}
-			// falls through to WM_COMMAND
-
+			[[fallthrough]]; // intentionally fall through to WM_COMMAND
 		case WM_COMMAND:
 			// Force all keys up to prevent key repeats
 			raise_saved_keys();
@@ -359,12 +358,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 //			WriteLine ( ttbuff);
 //			KeyboardEvent(kb_char,OEMscan,1); //Capture ascii value for scancode
 			return 0;
-			break;
 
 		case WM_SYSCHAR:
 			DefWindowProc(hWnd, message, wParam, lParam);
 			return 0;
-			break;
 
 		case WM_KEYUP:
 		case WM_SYSKEYUP:
@@ -376,7 +373,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			vccKeyboardHandleKey(kb_char,OEMscan,kEventKeyUp);
 			
 			return 0;
-			break;
 
 //----------------------------------------------------------------------------------------
 //	lParam bits
@@ -399,7 +395,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			// Ignore repeated system keys
 			if (lParam>>30) return 0;
-
+			[[fallthrough]];
 		case WM_KEYDOWN:
 
 			// get key scan code for emulator control keys
@@ -473,7 +469,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 			}
 			return 0;
-		break;
 
 		case WM_LBUTTONDOWN:  //0 = Left 1=right
 			SetButtonStatus(0,1);
@@ -502,7 +497,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				joystick(x,y);
 			}
 			return(0);
-			break;
+
 //		default:
 //			return DefWindowProc(hWnd, message, wParam, lParam);
    }

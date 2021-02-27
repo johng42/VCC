@@ -155,8 +155,10 @@ float RenderFrame (SystemState *RFState)
 		break;
 	case 2:
 		LoadCassetteBuffer(CassBuffer);
-
 		break;
+	default:
+		MessageBox(nullptr, "ERROR: Unknown Sound Output Mode: defaulting to cassette", "Error", 0);
+		SoundOutputMode = 0;
 	}
 	AudioIndex=0;
 
@@ -317,7 +319,6 @@ _inline int CPUCycle(void)
 	}
 	if (!clipboard.empty()) {
 		char tmp[] = { 0x00 };
-		char kbstate = 2;
 		int z = 0;
 
 		//Remember the original throttle setting.
@@ -540,7 +541,6 @@ unsigned char SetSndOutMode(unsigned char Mode)  //0 = Speaker 1= Cassette Out 2
 
 void PasteText() {
 	using namespace std;
-	std::string tmp;
 	string cliptxt, clipparse, lines, out, debugout;
 	char sc;
 	char letter;
@@ -715,12 +715,12 @@ void PasteText() {
 
 std::string GetClipboardText()
 {
-	if (!OpenClipboard(nullptr)) { MessageBox(0, "Unable to open clipboard.", "Clipboard", 0); return(""); }
+	if (!OpenClipboard(nullptr)) { MessageBox(0, "Unable to open clipboard.", "Clipboard", 0); return ""; }
 	HANDLE hClip = GetClipboardData(CF_TEXT);
-	if (hClip == nullptr) { CloseClipboard(); MessageBox(0, "No text found in clipboard.", "Clipboard", 0); return(""); }
+	if (hClip == nullptr) { CloseClipboard(); MessageBox(0, "No text found in clipboard.", "Clipboard", 0); return ""; }
 	char* tmp = static_cast<char*>(GlobalLock(hClip));
 	if (tmp == nullptr) {
-		CloseClipboard();  MessageBox(0, "NULL Pointer", "Clipboard", 0); return("");
+		CloseClipboard();  MessageBox(0, "NULL Pointer", "Clipboard", 0); return "";
 	}
 	std::string out(tmp);
 	GlobalUnlock(hClip);
